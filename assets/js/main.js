@@ -1,174 +1,186 @@
-// ─────────────────────────────────────────────
-//  ELSA Madrid UCM — main.js
-// ─────────────────────────────────────────────
-console.log('ELSA Madrid UCM site loaded');
+/**
+ * ELSA Madrid – main.js
+ * Features:
+ *  - Sticky navbar: transparent on top of hero, solid when scrolled
+ *  - Active nav link based on scroll position (Intersection Observer)
+ *  - Mobile menu toggle (hamburger → X)
+ *  - Close mobile menu when a link is clicked
+ *  - Scroll-reveal animation (IntersectionObserver on .reveal elements)
+ *  - Auto-update footer year
+ *  - Smooth scroll polyfill for anchor links (CSS handles modern browsers)
+ */
 
-// ── Scroll-triggered "in-view" animations ────
-function initScrollAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, i) => {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                const delay = parseFloat(el.dataset.delay || 0);
-                setTimeout(() => el.classList.add('in-view'), delay);
-                observer.unobserve(el);
-            }
-        });
-    }, { threshold: 0.15 });
+(function () {
+  'use strict';
 
-    document.querySelectorAll('.stat-item, .overview-card').forEach(el => {
-        observer.observe(el);
-    });
-}
+  /* ── DOM references ── */
+  const header    = document.getElementById('header');
+  const navToggle = document.getElementById('navToggle');
+  const navMenu   = document.getElementById('navMenu');
+  const navLinks  = document.querySelectorAll('.nav-link');
+  const sections  = document.querySelectorAll('section[id]');
+  const yearEl    = document.getElementById('currentYear');
+  const revealEls = document.querySelectorAll('.reveal');
 
-// ── Animated number counter ───────────────────
-function animateCounter(el, target, duration = 1600) {
-    const suffix = el.nextElementSibling; // .stat-suffix sibling
-    const start = performance.now();
-    const update = (now) => {
-        const progress = Math.min((now - start) / duration, 1);
-        // ease-out cubic
-        const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target);
-        if (progress < 1) requestAnimationFrame(update);
-        else el.textContent = target;
-    };
-    requestAnimationFrame(update);
-}
+  /* ──────────────────────────────────────────
+     Sticky Navbar
+     Adds .header--scrolled class after user
+     scrolls past the hero section.
+  ────────────────────────────────────────── */
+  function handleNavbarScroll() {
+    if (window.scrollY > 60) {
+      header.classList.add('header--scrolled');
+      header.classList.remove('header--transparent');
+    } else {
+      header.classList.remove('header--scrolled');
+      header.classList.add('header--transparent');
+    }
+  }
 
-function initCounters() {
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                const target = parseInt(el.dataset.target, 10);
-                animateCounter(el, target);
-                counterObserver.unobserve(el);
-            }
-        });
-    }, { threshold: 0.5 });
+  // Initialise on load
+  header.classList.add('header--transparent');
+  handleNavbarScroll();
+  window.addEventListener('scroll', handleNavbarScroll, { passive: true });
 
-    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
-        counterObserver.observe(el);
-    });
-}
 
-// ── Hamburger menu ────────────────────────────
-function initMobileMenu() {
-    const burger = document.getElementById('navbar-burger');
-    const nav    = document.getElementById('navbar-nav');
-    if (!burger || !nav) return;
-    burger.addEventListener('click', () => {
-        const open = nav.classList.toggle('open');
-        burger.classList.toggle('open', open);
-        burger.setAttribute('aria-expanded', open);
-    });
-    // Cerrar al hacer clic en un enlace
-    nav.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            nav.classList.remove('open');
-            burger.classList.remove('open');
-            burger.setAttribute('aria-expanded', 'false');
-        });
-    });
-}
+  /* ──────────────────────────────────────────
+     Mobile Menu Toggle
+  ────────────────────────────────────────── */
+  function openMenu() {
+    navMenu.classList.add('open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Cerrar menú de navegación');
+    document.body.style.overflow = 'hidden';
+  }
 
-// ── Sticky navbar hide/show on scroll ─────────
-function initStickyHeader() {
-    const navbar = document.getElementById('navbar');
-    if (!navbar) return;
-    let lastY = 0;
-    window.addEventListener('scroll', () => {
-        const y = window.scrollY;
-        if (y > 100) {
-            navbar.classList.toggle('hide', y > lastY);
-        } else {
-            navbar.classList.remove('hide');
+  function closeMenu() {
+    navMenu.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Abrir menú de navegación');
+    document.body.style.overflow = '';
+  }
+
+  navToggle.addEventListener('click', function () {
+    const isOpen = navMenu.classList.contains('open');
+    isOpen ? closeMenu() : openMenu();
+  });
+
+  // Close menu when any nav link is clicked
+  navLinks.forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Close menu on Escape key
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function (e) {
+    if (!header.contains(e.target) && navMenu.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+
+
+  /* ──────────────────────────────────────────
+     Active Nav Link on Scroll
+     Uses IntersectionObserver to highlight
+     the menu item matching the visible section.
+  ────────────────────────────────────────── */
+  var activeSection = '';
+
+  var sectionObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          activeSection = entry.target.id;
+          updateActiveLink(activeSection);
         }
-        lastY = y;
-    }, { passive: true });
-}
-
-// ── JSON data loaders ─────────────────────────
-async function loadJSON(path) {
-    try {
-        const res = await fetch(path);
-        if (!res.ok) throw new Error('Network response was not ok');
-        return await res.json();
-    } catch (e) {
-        console.error('Error loading JSON:', e);
-        return [];
+      });
+    },
+    {
+      rootMargin: '-50% 0px -50% 0px', // trigger when section crosses centre
+      threshold: 0
     }
-}
+  );
 
-async function renderEvents() {
-    const events = await loadJSON('data/events.json');
-    const container = document.getElementById('events-list');
-    if (!container) return;
-    if (events.length === 0) {
-        container.innerHTML = '<p>No hay eventos programados.</p>';
-        return;
-    }
-    container.innerHTML = events.map(e =>
-        `<div class="event-card">
-            <h4>${e.title}</h4>
-            <small>${e.date}</small>
-            <p>${e.description}</p>
-        </div>`
-    ).join('');
-}
+  sections.forEach(function (section) {
+    sectionObserver.observe(section);
+  });
 
-async function renderPosts() {
-    const posts = await loadJSON('data/posts.json');
-    const container = document.getElementById('posts-list');
-    if (!container) return;
-    if (posts.length === 0) {
-        container.innerHTML = '<p>No hay entradas por el momento.</p>';
-        return;
-    }
-    container.innerHTML = posts.map(p =>
-        `<article class="post-card">
-            <h4><a href="${p.url}">${p.title}</a></h4>
-            <small>${p.date}</small>
-            <p>${p.excerpt}</p>
-        </article>`
-    ).join('');
-}
-
-// ── Contact form ──────────────────────────────
-function initContactForm() {
-    const form = document.getElementById('contact-form');
-    if (!form) return;
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        const name = form.name.value;
-        const email = form.email.value;
-        const message = form.message.value;
-        const subject = encodeURIComponent('Contacto desde web ELSA Madrid UCM');
-        const body = encodeURIComponent(`Nombre: ${name}\nEmail: ${email}\n\n${message}`);
-        window.location.href = `mailto:complutense@es.elsa.org?subject=${subject}&body=${body}`;
+  function updateActiveLink(id) {
+    navLinks.forEach(function (link) {
+      const href = link.getAttribute('href');
+      if (href === '#' + id) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
     });
-}
+  }
 
-// ── Helpers ───────────────────────────────────
-function highlightCurrentNav() {
-    const path = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
-        const href = link.getAttribute('href');
-        if (href === path || (href === 'index.html' && path === '')) {
-            link.classList.add('active');
+
+  /* ──────────────────────────────────────────
+     Scroll-Reveal Animation
+     Adds .visible class to .reveal elements
+     when they enter the viewport.
+  ────────────────────────────────────────── */
+  var revealObserver = new IntersectionObserver(
+    function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target); // animate only once
         }
-    });
-}
+      });
+    },
+    {
+      threshold: 0.12
+    }
+  );
 
-// ── Init ──────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-    initScrollAnimations();
-    initCounters();
-    initStickyHeader();
-    initMobileMenu();
-    renderEvents();
-    renderPosts();
-    initContactForm();
-    highlightCurrentNav();
-});
+  revealEls.forEach(function (el) {
+    revealObserver.observe(el);
+  });
+
+
+  /* ──────────────────────────────────────────
+     Footer – current year
+  ────────────────────────────────────────── */
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+  }
+
+
+  /* ──────────────────────────────────────────
+     Contact form – basic client-side feedback
+     (Replace with real back-end or service)
+  ────────────────────────────────────────── */
+  var contactForm = document.querySelector('.contact-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var btn = contactForm.querySelector('button[type="submit"]');
+      var originalText = btn.textContent;
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+
+      // Simulate async send
+      setTimeout(function () {
+        btn.textContent = '✓ ¡Mensaje enviado!';
+        btn.style.backgroundColor = '#28a745';
+        contactForm.reset();
+
+        setTimeout(function () {
+          btn.disabled = false;
+          btn.textContent = originalText;
+          btn.style.backgroundColor = '';
+        }, 3000);
+      }, 1200);
+    });
+  }
+
+})();

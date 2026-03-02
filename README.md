@@ -1,52 +1,81 @@
-# ELSA Madrid UCM Website
+# ELSA Madrid – Web
 
-This repository contains a simple static website for the local group **ELSA Madrid UCM**. It is built with plain HTML, CSS, and JavaScript.
+Static website built with HTML5, CSS3 and vanilla JavaScript. No build step, no dependencies.
 
-## Structure
+---
 
-- `index.html` – Home page with hero banner and overview
-- `about.html` – Information about the local group
+## Requisitos
 
-Layout uses a wave header and the primary colors azul (#004080), naranja (#ffa500) y blanco.- `events.html` – Upcoming events
-- `blog.html` – News and articles
-- `board.html` – Composition of the local board
-- `contact.html` – Contact form
-- `assets/css/style.css` – Global styles
-- `assets/js/main.js` – JavaScript for interactivity (load events/posts, contact form)
-- `data/events.json` & `data/posts.json` – sample content for dynamic loading
+Necesitas tener instalado **uno** de los siguientes:
 
-## Getting started
+| Opción | Descarga |
+|--------|----------|
+| Python 3 _(recomendado)_ | https://www.python.org/downloads/ |
+| Node.js | https://nodejs.org/ |
 
-1. Open this folder in your code editor.
-2. Edit the HTML files to add content and links to the national association when provided.
-3. You can serve the site locally using the helper script `run-dev.ps1` (recommended)
+---
 
-### Run locally (one command)
+## Cómo levantar la web
 
-From PowerShell, run:
+### Opción A — doble clic (más fácil)
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\run-dev.ps1
-```
+1. Abre la carpeta del proyecto en el Explorador de archivos.
+2. Haz doble clic en **`serve.bat`**.
+3. Se abre automáticamente el navegador en `http://localhost:8000`.
 
-This script will:
-- buscar `python` en PATH o en `%APPDATA%\uv` y arrancar `python -m http.server 8080` si está disponible.
-- si no encuentra Python, usará `serve.ps1` como fallback (PowerShell HTTP listener con MIME correctos).
-- abrirá automaticamente `http://localhost:8080/` en tu navegador por defecto.
+> Si Windows pide confirmación de seguridad, haz clic en "Ejecutar de todas formas".
 
-If you prefer to run python directly:
+---
+
+### Opción B — desde la terminal
 
 ```powershell
-# from the project root
-& 'C:\Users\sofis\AppData\Roaming\uv\python\cpython-3.14.3-windows-x86_64-none\python.exe' -m http.server 8080
+# PowerShell
+.\serve.ps1
 ```
 
-4. Deploy to any static hosting (GitHub Pages, Netlify, etc.) when ready.
+```bash
+# CMD
+serve.bat
+```
 
-## Future enhancements
+```bash
+# Si tienes Python instalado directamente
+python -m http.server 8000
+```
 
-- Add a dynamic blog or CMS for easier updates
-- Integrate an event calendar plugin
-- Hook the contact form to an email service or backend
+```bash
+# Si tienes Node.js instalado directamente
+npx serve -l 8000 .
 
-Feel free to expand or change the design as needed.  
+```
+
+Abre el navegador en: **http://localhost:8000**
+
+Para detener el servidor: `Ctrl + C`
+
+---
+
+## Estructura del proyecto
+
+```
+web-elsa-madrid-ucm/
+├── index.html            # Página principal
+├── serve.ps1             # Script de arranque (PowerShell)
+├── serve.bat             # Script de arranque (doble clic)
+├── README.md
+└── assets/
+    ├── css/
+    │   └── styles.css    # Todos los estilos
+    ├── js/
+    │   └── main.js       # Lógica del frontend
+    └── images/           # Imágenes e iconos
+```
+
+---
+
+## Notas
+
+- Es un sitio **100 % estático**. No tiene back-end ni base de datos.
+- El formulario de contacto es solo una demo visual; no envía correos reales.
+- Para producción, sube el contenido tal cual a cualquier hosting estático (GitHub Pages, Netlify, Vercel, etc.).
