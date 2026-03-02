@@ -3,45 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noticias - ELSA Madrid UCM</title>
+    <title>Desarrollo profesional - ELSA Madrid UCM</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <header>
-        <div class="top-bar">
-            <div class="left-links">
-                <a href="https://elsaspain.org" target="_blank" rel="noopener">ELSA Spain</a>
-                <a href="events.html">Actividades</a>
-            </div>
-            <div class="right-links">
-                <a href="about.html">Nosotros</a>
-                <a href="contact.html">Contacto</a>
-            </div>
+    <header class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <nav class="navbar-nav" id="navbar-nav">
+                <a href="about.html" class="nav-link">Nosotros</a>
+                <a href="events.html" class="nav-link">Actividades</a>
+                <a href="blog.html" class="nav-link">Desarrollo profesional</a>
+                <a href="index.html" class="nav-logo"><img src="assets/images/elsa-blue.png" alt="ELSA logo"></a>
+                <a href="events.html" class="nav-link">Eventos</a>
+                <a href="board.html" class="nav-link">Junta local</a>
+                <a href="contact.html" class="nav-link">Contacto</a>
+            </nav>
+            <button class="navbar-burger" id="navbar-burger" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
         </div>
-        <div class="main-header">
-            <a href="index.html"><img class="logo" src="assets/images/elsa-blue.png" alt="ELSA logo"></a>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="about.html">Quiénes somos</a></li>
-                <li><a href="events.html">Eventos</a></li>
-                <li><a href="blog.html">Noticias</a></li>
-                <li><a href="board.html">Junta local</a></li>
-                <li><a href="contact.html">Contacto</a></li>
-            </ul>
-        </nav>
     </header>
     <main>
-        <h2>Últimas noticias</h2>
+        <h2>Desarrollo profesional</h2>
         <div id="posts-list" class="posts-container">
             <p>Cargando noticias...</p>
         </div>
     </main>
     <script src="assets/js/main.js"></script>
-    <footer style="text-align:center;padding:1rem;background:#f4f4f4;">
-        <p>Parte de <a href="https://elsaspain.org" target="_blank" rel="noopener">ELSA Spain</a></p>
-        <p>&copy; 2026 ELSA Madrid UCM</p>
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#002a5c"/>
+            </svg>
+        </div>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <img src="assets/images/elsa-blue.png" alt="ELSA Madrid UCM" class="footer-logo">
+                <p>Grupo local de ELSA en la Universidad Complutense de Madrid. Formando a los juristas del mañana.</p>
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/elsamadriducm/?hl=es" aria-label="Instagram" class="social-link" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/elsa-complutense/?originalSubdomain=es" aria-label="LinkedIn" class="social-link" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><line x1="8" y1="11" x2="8" y2="16"/><line x1="8" y1="8" x2="8" y2="8.5"/><path d="M12 11v5M12 11c0-1.5 1-2 2-2s2 .5 2 2v3"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/DerechoUCM" aria-label="Facebook" class="social-link" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-nav">
+                <h4>Navegación</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="about.html">Quiénes somos</a></li>
+                    <li><a href="events.html">Eventos</a></li>
+                    <li><a href="blog.html">Desarrollo profesional</a></li>
+                    <li><a href="board.html">Junta local</a></li>
+                    <li><a href="contact.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contacto</h4>
+                <address>
+                    <p>Facultad de Derecho<br>Universidad Complutense de Madrid<br>28040 Madrid, España</p>
+                </address>
+                <a href="mailto:complutense@es.elsa.org" class="footer-email">complutense@es.elsa.org</a>
+                <div class="footer-orgs">
+                    <a href="https://elsaspain.org" target="_blank" rel="noopener" class="footer-org-link">ELSA Spain</a>
+                    <span>·</span>
+                    <a href="https://elsa.org" target="_blank" rel="noopener" class="footer-org-link">ELSA International</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ELSA Madrid UCM &nbsp;&bull;&nbsp; Todos los derechos reservados</p>
+        </div>
     </footer>
 </body>
 </html>

@@ -123,7 +123,7 @@ async function renderPosts() {
     const container = document.getElementById('posts-list');
     if (!container) return;
     if (posts.length === 0) {
-        container.innerHTML = '<p>No hay noticias aún.</p>';
+        container.innerHTML = '<p>No hay entradas por el momento.</p>';
         return;
     }
     container.innerHTML = posts.map(p =>
@@ -146,7 +146,18 @@ function initContactForm() {
         const message = form.message.value;
         const subject = encodeURIComponent('Contacto desde web ELSA Madrid UCM');
         const body = encodeURIComponent(`Nombre: ${name}\nEmail: ${email}\n\n${message}`);
-        window.location.href = `mailto:elsa.madrid.ucm@example.com?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:complutense@es.elsa.org?subject=${subject}&body=${body}`;
+    });
+}
+
+// ── Helpers ───────────────────────────────────
+function highlightCurrentNav() {
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === path || (href === 'index.html' && path === '')) {
+            link.classList.add('active');
+        }
     });
 }
 
@@ -159,4 +170,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderEvents();
     renderPosts();
     initContactForm();
+    highlightCurrentNav();
 });
