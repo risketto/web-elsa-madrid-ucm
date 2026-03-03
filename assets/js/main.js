@@ -1,5 +1,5 @@
 /**
- * ELSA Madrid – main.js
+ * ELSA Madrid UCM – main.js
  * Features:
  *  - Sticky navbar: transparent on top of hero, solid when scrolled
  *  - Active nav link based on scroll position (Intersection Observer)
@@ -154,32 +154,31 @@
 
 
   /* ──────────────────────────────────────────
-     Contact form – basic client-side feedback
-     (Replace with real back-end or service)
+     Contact form – opens email client
   ────────────────────────────────────────── */
   var contactForm = document.querySelector('.contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      var btn = contactForm.querySelector('button[type="submit"]');
-      var originalText = btn.textContent;
+      var nameField = contactForm.querySelector('#name');
+      var emailField = contactForm.querySelector('#email');
+      var subjectField = contactForm.querySelector('#subject');
+      var messageField = contactForm.querySelector('#message');
 
-      btn.disabled = true;
-      btn.textContent = 'Enviando…';
+      var name = nameField ? nameField.value.trim() : '';
+      var email = emailField ? emailField.value.trim() : '';
+      var subject = subjectField ? subjectField.value.trim() : '';
+      var message = messageField ? messageField.value.trim() : '';
 
-      // Simulate async send
-      setTimeout(function () {
-        btn.textContent = '✓ ¡Mensaje enviado!';
-        btn.style.backgroundColor = '#28a745';
-        contactForm.reset();
+      var safeSubject = encodeURIComponent(subject || 'Contacto desde web ELSA Madrid UCM');
+      var body = encodeURIComponent(
+        'Nombre: ' + name + '\n' +
+        'Email: ' + email + '\n\n' +
+        message
+      );
 
-        setTimeout(function () {
-          btn.disabled = false;
-          btn.textContent = originalText;
-          btn.style.backgroundColor = '';
-        }, 3000);
-      }, 1200);
+      window.location.href = 'mailto:complutense@es.elsa.org?subject=' + safeSubject + '&body=' + body;
     });
   }
 

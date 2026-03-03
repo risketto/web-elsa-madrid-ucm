@@ -1,5 +1,5 @@
 # ============================================================
-#  serve.ps1 – ELSA Madrid local development server
+#  serve.ps1 – ELSA Madrid UCM local development server
 #  Run this script to serve the site at http://localhost:3000
 #  Usage: Right-click > "Run with PowerShell"
 #         or from a terminal: .\serve.ps1
@@ -9,7 +9,7 @@ $PORT = 8000
 $ROOT = $PSScriptRoot   # folder where this script lives
 
 Write-Host ""
-Write-Host "  ELSA Madrid – Local Dev Server" -ForegroundColor Cyan
+Write-Host "  ELSA Madrid UCM – Local Dev Server" -ForegroundColor Cyan
 Write-Host "  --------------------------------" -ForegroundColor DarkGray
 Write-Host ""
 

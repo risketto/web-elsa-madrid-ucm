@@ -1,4 +1,4 @@
-# ELSA Madrid – Web
+# ELSA Madrid UCM – Web
 
 Static website built with HTML5, CSS3 and vanilla JavaScript. No build step, no dependencies.
 
